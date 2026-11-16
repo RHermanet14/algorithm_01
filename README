@@ -1,0 +1,8 @@
+# Algorithm_01: Most important point
+## Goal
+Find the most "important" point in a given data set.
+- Read a file of data
+- Weigh each point based on how many primary, secondary, etc connections it has
+## Extra
+- Make it a template to work with any {VARIABLE, VARIABLE[]} hashmap
+- Add a relationship diagram for visual aid of the data
