@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 struct point {
     // Contains the value of the point, and all of the points connections
@@ -19,6 +20,19 @@ struct point {
 class network { // A network of points
 private:
     std::vector<point> points;
+    std::vector<point> check_key(int key, std::unordered_map<int, std::vector<int>> map) {
+        std::vector<point> key_connections;
+        for (auto const& i : map) { // i.first = int key
+            if (key != i.first) {
+                for (auto const& j : i.second) { // j = each int in std::vector<int>
+                    if (key == j) {
+                        key_connections.push_back(i.first);
+                    }
+                }
+            }         
+        }
+        return key_connections;
+    }
 public:
     network(std::unordered_map<int, std::vector<int>> map) {
         for (auto const& i : map) {
@@ -26,11 +40,26 @@ public:
             for (auto const& j : i.second) {
                 p.connections.first.push_back(point(j)); // Will most likey need to become a pointer
             }
-            // Create algorithm that takes a key in the hashmap and determines if the key appears as a value in another key.
+            p.connections.second = check_key(i.first, map);
             points.push_back(p);
         }
     }
-
+    void print_point_connections_out(int key) {
+        auto p = std::find_if(points.begin(), points.end(), [key](point point){return key == point.data;});
+        if (p == points.end()) return; // point does not exist in network
+        for (auto const& i : p->connections.first) {
+            std::cout << i.data << ' ';
+        }
+        std::cout << '\n';
+    }
+    void print_point_connections_in(int key) {
+        auto p = std::find_if(points.begin(), points.end(), [key](point point){return key == point.data;});
+        if (p == points.end()) return; // point does not exist in network
+        for (auto const& i : p->connections.second) {
+            std::cout << i.data << ' ';
+        }
+        std::cout << '\n';
+    }
     ~network() { // Will need to implement if memory is allocated
     }
 
@@ -47,11 +76,6 @@ void print_map(std::unordered_map<int, std::vector<int>> map) {
     return;
 }
 
-void print_all_connections() { // Recursive?
-    // Print each degree of connection
-    return;
-}
-
 int main() {
     std::ifstream file("input.txt");
     if (!file) {
@@ -62,6 +86,7 @@ int main() {
     // Better for data that is not uniform in size
     std::string line;
     std::unordered_map<int, std::vector<int>> table;
+    int network_test = 0; // = the last key in the file. Used to test printing the network without having to manually switch each time a new input is generated.
     while (std::getline(file, line)) { // Generate data table
         int temp, key;
         std::vector<int> values;
@@ -72,12 +97,17 @@ int main() {
             values.push_back(temp);
         }
         table.insert({key, values});
+        network_test = key;
     }
-    
-    print_map(table);
-    
-    // Check if each of the keys values are keys themselves
-    
     file.close();
+    
+    //print_map(table);
+    
+    network n(table);
+    std::cout << "Connections going from point " << network_test << " to other points:\n";
+    n.print_point_connections_out(network_test);
+    std::cout << "Connections coming from other points to point " << network_test << ":\n";
+    n.print_point_connections_in(network_test);
+
     return 0;
 }
