@@ -9,8 +9,7 @@ int main(int argc, char* argv[]) {
     int num_points = 20; // The number of unique keys
     int num_connections = 100; // The number of values each key has
     int max_num = 100; // The maximum value of the keys and values
-    std::vector<int> keys;
-
+    
     // Optionally change input file
     if (argc > 1)
         num_points = std::stoi(argv[1]);
@@ -26,15 +25,16 @@ int main(int argc, char* argv[]) {
 
     srand(time(0));
     std::ofstream file("input.txt"); // open input.txt for output
-
+    
     for(int i = 0; i < num_points; i++) {
         int temp = (rand() % max_num) + 1;
-        while(std::find(keys.begin(), keys.end(), temp) != keys.end()) { // Generate unique keys
-            temp = (rand() % max_num) + 1;
-        }
-        keys.push_back(temp);
-        for(int j = 0; j < num_connections - 1; j++) {
-            file << (rand() % max_num) + 1 << ' '; // Random number between 1 and num_connections
+        std::vector<int> points;
+        for(int j = 0; j < num_connections; j++) {
+            while(std::find(points.begin(), points.end(), temp) != points.end()) {
+                temp = (rand() % max_num) + 1;
+            }
+            file << temp << ' '; // Random number between 1 and max_num
+            points.push_back(temp);
         }
         file << '\n';
     }
