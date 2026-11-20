@@ -10,3 +10,5 @@ Find the most "important" point in a given data set.
 - Switch from std::unordered_map to just the network class
 - Pass std::ifstream into network constructor
 - Change network.connections from std::pair to just std::vector representing all connections between points
+### 11/20/26
+- Will need to dynamically create new points and connect previous points if constructing network from just a filestream is desired
