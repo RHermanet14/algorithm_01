@@ -25,11 +25,18 @@ int main(int argc, char* argv[]) {
 
     srand(time(0));
     std::ofstream file("input.txt"); // open input.txt for output
-    
+    std::vector<int> keys;
+
     for(int i = 0; i < num_points; i++) {
         int temp = (rand() % max_num) + 1;
+        while(std::find(keys.begin(), keys.end(), temp) != keys.end()) {
+            temp = (rand() % max_num) + 1;
+        }
+        file << temp << ' ';
+        keys.push_back(temp);
+
         std::vector<int> points;
-        for(int j = 0; j < num_connections; j++) {
+        for(int j = 0; j < num_connections - 1; j++) {
             while(std::find(points.begin(), points.end(), temp) != points.end()) {
                 temp = (rand() % max_num) + 1;
             }

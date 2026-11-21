@@ -73,17 +73,6 @@ public:
 
 };
 
-void print_map(std::unordered_map<int, std::vector<int>> map) {
-    for (auto const& i : map) {
-        std::cout << i.first << ' ';
-        for (auto const& j : i.second) {
-            std::cout << j << ' ';
-        }
-        std::cout << '\n';
-    }
-    return;
-}
-
 int main() {
     std::ifstream file("input.txt");
     if (!file) {
@@ -110,8 +99,6 @@ int main() {
         network_test = key;
     }
     file.close();
-    
-    //print_map(table);
 
     network n(table);
     std::cout << "Connections between point " << network_test << " and other points:\n";
