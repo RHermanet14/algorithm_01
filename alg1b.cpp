@@ -8,7 +8,7 @@
 #include <algorithm>
 
 void print_map(std::unordered_map<int, std::vector<int>> table) {
-    std::ofstream ofile("output.txt"); // open output.txt for output
+    std::ofstream ofile("output_b.txt"); // open output_b.txt for output
     
     // Print to both stdout and output.txt
     for (auto const& i : table) {
@@ -49,6 +49,6 @@ int main() {
     file.close();
     
     print_map(table);
-    
+
     return 0;
 }

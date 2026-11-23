@@ -29,11 +29,14 @@ public:
             std::stringstream line_stream(line);
         
             line_stream >> key;
-            point p(key);
+            auto find_key = std::find_if(points.begin(), points.end(), [key](point point){return key == point.data;});
+            bool repeat_key = (find_key != points.end());
+            point p = repeat_key ? *find_key : point(key);
+            
             while (line_stream >> temp) {
                 p.connections.push_back(point(temp));
                 auto con = std::find_if(points.begin(), points.end(), [temp](point point){return temp == point.data;});
-                if (con != points.end()) {
+                if (con != points.end()) { // if temp is already a key
                     // Add point key to con.connections
                     con->connections.push_back(key);
                 } else {
@@ -42,19 +45,38 @@ public:
                     p2.connections.push_back(key);
                     points.push_back(p2);
                 }
-                // NEEDS TO BE AN ACTUAL POINTER TO MAKE IT WORK! p.connections.find(temp) != p2
             }
-            points.push_back(p);
+            if (!repeat_key)
+                points.push_back(p);
         }
+    }
+
+    void print_all_connections() {
+        std::ofstream ofile("output_a.txt"); // open output_a.txt for output
+        for (auto const& i : points) {
+            std::cout << i.data << ' ';
+            ofile << i.data << ' ';
+            for (auto const& j : i.connections) {
+                std::cout << j.data << ' ';
+                ofile << j.data << ' ';
+            }
+            std::cout << '\n';
+            ofile << '\n';
+        }
+        ofile.close();
     }
     
     void print_point_connections(int key) {
+        std::ofstream ofile("output_a.txt"); // open output_a.txt for output
         auto p = std::find_if(points.begin(), points.end(), [key](point point){return key == point.data;});
         if (p == points.end()) return; // point does not exist in network
         for (auto const& i : p->connections) {
             std::cout << i.data << ' ';
+            ofile << i.data << ' ';
         }
         std::cout << '\n';
+        ofile << '\n';
+        ofile.close();
     }
 
     ~network() { // Will need to implement if memory is allocated
@@ -71,12 +93,11 @@ int main() {
     network n(file);
     file.close();
 
-    //network n(table);
-    //std::cout << "Connections between point " << network_test << " and other points:\n";
-    std::cout << "Enter a num to check its connections: ";
-    int temp = 0;
-    std::cin >> temp;
-    n.print_point_connections(temp);
+    //std::cout << "Enter a num to check its connections: ";
+    //int temp = 0;
+    //std::cin >> temp;
+    //n.print_point_connections(temp);
+    n.print_all_connections();
 
     return 0;
 }
