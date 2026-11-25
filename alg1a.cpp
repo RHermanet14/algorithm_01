@@ -34,18 +34,17 @@ public:
             point* p = repeat_key ? *find_key : new point(key);
                 
             while (line_stream >> temp) {
-                
+                point* p2 = new point(temp);
                 auto con = std::find_if(points.begin(), points.end(), [temp](point* point){return temp == point->data;});
                 if (con != points.end()) { // if temp is already a key
                     // Add point key to con.connections
                     (*con)->connections.push_back(p);
                 } else {
                     // Create a new point and add key
-                    point* p2 = new point(temp);
-                    p->connections.push_back(p2);
                     p2->connections.push_back(p);
                     points.push_back(p2);
                 }
+                p->connections.push_back(p2);
             }
             if (!repeat_key)
                 points.push_back(p);
@@ -98,11 +97,11 @@ int main() {
     network n(file);
     file.close();
 
-    std::cout << "Enter a num to check its connections: ";
-    int temp = 0;
-    std::cin >> temp;
-    n.print_point_connections(temp);
-    //n.print_all_connections();
+    //std::cout << "Enter a num to check its connections: ";
+    //int temp = 0;
+    //std::cin >> temp;
+    //n.print_point_connections(temp);
+    n.print_all_connections();
 
     return 0;
 }
