@@ -12,3 +12,7 @@ Find the most "important" point in a given data set.
 - Change network.connections from std::pair to just std::vector representing all connections between points
 ### 11/20/26
 - Will need to dynamically create new points and connect previous points if constructing network from just a filestream is desired
+### 11/25/26
+- Both the hash map version and the multiple linked list versions are implemented
+### 11/26/26
+- Version B requires significantly less memory than version A, but I probably didn't do version B correct because it seems no one online can agree on how to calculate the size of an unordered_map. Happy Thanksgiving.

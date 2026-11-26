@@ -79,6 +79,16 @@ public:
         ofile.close();
     }
 
+    int get_size() {
+        //include vector of points?
+        std::size_t memory_allocated = 0;
+        for (auto const& point : points) {
+            memory_allocated += (point->connections.size() * sizeof(*point)) + sizeof(int);
+        }
+        
+        return memory_allocated;
+    }
+
     ~network() { // Will need to implement if memory is allocated
         for (auto const& i : points) {
             delete(i);
@@ -101,7 +111,8 @@ int main() {
     //int temp = 0;
     //std::cin >> temp;
     //n.print_point_connections(temp);
-    n.print_all_connections();
+    //n.print_all_connections();
+    std::cout << "The network is " << n.get_size() << " bytes big.\n";
 
     return 0;
 }

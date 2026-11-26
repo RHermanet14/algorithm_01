@@ -25,6 +25,17 @@ void print_map(std::unordered_map<int, std::vector<int>> table) {
     return;
 }
 
+int get_size(std::unordered_map<int, std::vector<int>> table) {
+    std::size_t size = 0;
+    for (auto const& key : table) {
+        size += sizeof(key.first);
+        for(auto const& value : key.second) {
+            size += sizeof(value);
+        }
+    }
+    return size;
+}
+
 int main() {
     std::ifstream file("input.txt");
     if (!file) {
@@ -48,7 +59,8 @@ int main() {
     }
     file.close();
     
-    print_map(table);
+    //print_map(table);
+    std::cout << "The network is " << get_size(table) << " bytes big.\n";
 
     return 0;
 }
