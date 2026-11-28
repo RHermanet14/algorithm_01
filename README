@@ -16,3 +16,5 @@ Find the most "important" point in a given data set.
 - Both the hash map version and the multiple linked list versions are implemented
 ### 11/26/26
 - Version B requires significantly less memory than version A, but I probably didn't do version B correct because it seems no one online can agree on how to calculate the size of an unordered_map. Happy Thanksgiving.
+### 11/27/26
+- Made into template. Will want to try with real data and visualize it.

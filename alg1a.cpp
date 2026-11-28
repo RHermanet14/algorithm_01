@@ -7,35 +7,35 @@
 #include <utility>
 #include <algorithm>
 
+template <typename T>
 struct point {
     // Contains the value of the point, and all of the points connections
     // Think of it like a linked list with multiple doubly linked connections
-    int data;
+    T data;
     std::vector<point*> connections;
-    point(int val) {
-        data = val;
-    }
+    point(T val) : data(val) {}
 };
 
+template <typename T>
 class network { // A network of points
 private:
-    std::vector<point*> points;
+    std::vector<point<T>*> points;
 
 public:
     network(std::istream& file) {
         std::string line;
         while (std::getline(file, line)) {
-            int temp, key;
+            T temp, key;
             std::stringstream line_stream(line);
         
             line_stream >> key;
-            auto find_key = std::find_if(points.begin(), points.end(), [key](point* point){return key == point->data;});
+            auto find_key = std::find_if(points.begin(), points.end(), [key](point<T>* point){return key == point->data;});
             bool repeat_key = (find_key != points.end());
-            point* p = repeat_key ? *find_key : new point(key);
+            point<T>* p = repeat_key ? *find_key : new point(key);
                 
             while (line_stream >> temp) {
-                point* p2 = new point(temp);
-                auto con = std::find_if(points.begin(), points.end(), [temp](point* point){return temp == point->data;});
+                point<T>* p2 = new point(temp);
+                auto con = std::find_if(points.begin(), points.end(), [temp](point<T>* point){return temp == point->data;});
                 if (con != points.end()) { // if temp is already a key
                     // Add point key to con.connections
                     (*con)->connections.push_back(p);
@@ -66,9 +66,9 @@ public:
         ofile.close();
     }
     
-    void print_point_connections(int key) {
+    void print_point_connections(T key) {
         std::ofstream ofile("output_a.txt"); // open output_a.txt for output
-        auto p = std::find_if(points.begin(), points.end(), [key](point* point){return key == point->data;});
+        auto p = std::find_if(points.begin(), points.end(), [key](point<T>* point){return key == point->data;});
         if (p == points.end()) return; // point does not exist in network
         for (auto const& i : (*p)->connections) {
             std::cout << i->data << ' ';
@@ -83,7 +83,7 @@ public:
         //include vector of points?
         std::size_t memory_allocated = 0;
         for (auto const& point : points) {
-            memory_allocated += (point->connections.size() * sizeof(*point)) + sizeof(int);
+            memory_allocated += (point->connections.size() * sizeof(*point)) + sizeof(T);
         }
         
         return memory_allocated;
@@ -104,7 +104,7 @@ int main() {
         std::cerr << "Error: could not open file\n";
         return 1;
     }
-    network n(file);
+    network<int> n(file);
     file.close();
 
     //std::cout << "Enter a num to check its connections: ";
